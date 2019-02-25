@@ -17,11 +17,11 @@ public class IntentController {
     @Autowired
     private IntentRepository repository;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping(value = "/")
     public ResponseEntity<List<Intent>> getAllIntents() {
         return new ResponseEntity<List<Intent>>(repository.findAll(), HttpStatus.OK);
     }
-    @RequestMapping(value = "/{tag}", method = RequestMethod.GET)
+    @GetMapping(value = "/{tag}")
     public ResponseEntity<Intent> getPetByTag(@PathVariable("tag") String tag) {
         if(repository.findByTag(tag)==null){
             return  new ResponseEntity("Tag dosn't exist !",
@@ -29,7 +29,7 @@ public class IntentController {
         }
         return new ResponseEntity<Intent>(repository.findByTag(tag),HttpStatus.OK);
     }
-    @RequestMapping(value = "/",method = RequestMethod.POST)
+    @PostMapping(value = "/", consumes = "application/json", produces = "application/json" )
     public ResponseEntity<Intent> addIntent(@Valid @RequestBody Intent intent){
         if (repository.existsByTag(intent.getTag())){
             return new ResponseEntity("Tag already exists. Tag must be unique !",
@@ -39,7 +39,7 @@ public class IntentController {
         repository.save(intent);
         return new ResponseEntity<Intent>(intent,HttpStatus.OK);
     }
-    @RequestMapping(value = "/{tag}",method = RequestMethod.PUT)
+    @PutMapping(value = "/{tag}",consumes = "application/json")
     public ResponseEntity updateIntent(@PathVariable("tag") String tag, @Valid @RequestBody Intent intent){
         Intent formerIntent= repository.findByTag(tag);
         intent.setTag(tag);
@@ -49,7 +49,7 @@ public class IntentController {
         return new  ResponseEntity("Updated succefully !",
                 HttpStatus.OK);
     }
-    @RequestMapping(value = "/{tag}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{tag}")
     public ResponseEntity deleteIntent(@PathVariable String tag) {
         repository.delete(repository.findByTag(tag));
         return  new ResponseEntity("Deleted succefullly",

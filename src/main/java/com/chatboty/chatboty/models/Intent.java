@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
-@Data
+@Data //is a Lombok annotation to create all the getters, setters, equals, hash, and toString methods, based on the fields.
 public class Intent {
 
     @Id
